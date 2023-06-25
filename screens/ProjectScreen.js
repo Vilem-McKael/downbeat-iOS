@@ -9,6 +9,8 @@ export default function ProjectScreen() {
     const [projectTitle, setProjectTitle] = useState('Project 1')
     const [projectBPM, setProjectBPM] = useState(120)
 
+    const [isPlaying, setIsPlaying] = useState(false)
+
     // PROJECT HANDLERS
 
     function handleSaveProject() {
@@ -22,11 +24,11 @@ export default function ProjectScreen() {
     // PLAYBACK HANDLERS
 
     function handleStartPlayback() {
-        return
+        setIsPlaying(true)
     }
 
     function handleStopPlayback() {
-        return
+        setIsPlaying(false)
     }
 
     // TRACK HANDLERS
@@ -35,7 +37,7 @@ export default function ProjectScreen() {
         setTrackData((oldTrackData) => [
             ...oldTrackData,
             {
-                id: oldTrackData.length, // starts at 0
+                index: oldTrackData.length, // starts at 0
                 sample: 'kick1', // starter sample
                 volume: 50, // half volume to begin, halfway on knob
                 contents: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // 16 long by default (for now)
@@ -45,6 +47,13 @@ export default function ProjectScreen() {
 
     function handleDeleteTrack(trackID) {
         setTrackData((oldTrackData) => oldTrackData.filter((track) => track.id !== trackID))
+    }
+
+    function updateTrackContents(trackIndex, contents) {
+        const trackDataCopy = JSON.parse(JSON.stringify(trackData));
+        trackDataCopy[trackIndex].contents = contents;
+        setTrackData(trackDataCopy);
+
     }
 
   return (
@@ -65,10 +74,12 @@ export default function ProjectScreen() {
             data={trackData}
             renderItem={(itemData) => {
                 return <Track
-                        trackID={itemData.item.id}
+                        index={itemData.item.index}
                         sample={itemData.item.sample}
                         volume={itemData.item.volume}
                         contents={itemData.item.contents}
+                        isPlaying={isPlaying}
+                        updateTrackContents={updateTrackContents}
                         />
             }}
             alwaysBounceVertical='false'

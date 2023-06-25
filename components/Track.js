@@ -3,9 +3,11 @@ import React from 'react'
 import TrackHeader from './TrackHeader'
 import TrackBody from './TrackBody'
 
-export default function Track({trackID, sample, volume, contents}) {
+export default function Track({index, sample, volume, contents, updateTrackContents, isPlaying}) {
 
   console.log(contents)
+
+  
 
   return (
     <View style={styles.trackContainer}>
@@ -13,7 +15,7 @@ export default function Track({trackID, sample, volume, contents}) {
           <TrackHeader sample={sample} volume={volume}/>
         </View>
         <View>
-          <TrackBody contents={contents}/>
+          <TrackBody trackIndex={index} contents={contents} isPlaying={isPlaying} updateTrackContents={updateTrackContents}/>
         </View>
 
     </View>
