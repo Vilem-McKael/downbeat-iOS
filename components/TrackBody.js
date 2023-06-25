@@ -25,7 +25,7 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
                 console.log('Sound Loaded Successfully')
                 console.log(sound)
                 soundRef.current = sound;
-                console.log("Playback status1:", soundRef.current.getStatusAsync());
+                console.log("Playback status1:", await soundRef.current.getStatusAsync());
             } catch (error) {
                 console.log("Error loading sound:", error);
             }
