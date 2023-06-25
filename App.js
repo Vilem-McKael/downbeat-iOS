@@ -4,6 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import LandingScreen from './screens/LandingScreen';
 import ProjectScreen from './screens/ProjectScreen';
+import PlaybackTest from './components/PlaybackTest';
 
 export default function App() {
 
@@ -15,7 +16,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {screen}
+      {/* {screen}
+       */}
+       <PlaybackTest />
     </View>
   );
 }

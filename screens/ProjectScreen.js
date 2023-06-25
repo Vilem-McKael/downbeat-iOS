@@ -83,9 +83,7 @@ export default function ProjectScreen() {
                         />
             }}
             alwaysBounceVertical='false'
-            keyExtractor={(item) => {
-                return item.id
-            }}
+            keyExtractor={(item, index) => index.toString}
             style={styles.trackList}
             />
         </View>
