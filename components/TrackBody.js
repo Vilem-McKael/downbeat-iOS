@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Audio } from 'expo-av';
 
+import kick1 from '../assets/audio/samples/kick1.wav'
+
 import Tile from './Tile'
 
 const soundObject = new Audio.Sound();
@@ -14,48 +16,103 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
     const [sample, setSample] = useState();
 
 
-    const soundRef = useRef(null);
+    const soundRef = useRef(undefined);
+
+    // useEffect(() => {
+    //     // const soundObject = new Audio.Sound();
+        
+    //     // const loadSounds = async () => {
+    //     //     try {
+    //     //         const sound = new Audio.Sound();
+    //     //         await sound.loadAsync({uri: '../'.file});
+    //     //         console.log('Sound Loaded Successfully');
+    //     //         console.log(sound);
+    //     //         soundRef.current = sound;
+    //     //         console.log("Playback status1:", await soundRef.current.getStatusAsync());
+    //     //     } catch (error) {
+    //     //         console.log("Error loading sound:", error);
+    //     //     }
+            
+    //     // };
+    //     // loadSounds();
+
+    //     return () => {
+    //         console.log('here120938')
+    //         soundRef.current && soundRef.current.unloadAsync();
+    //         console.log(soundRef.current)
+    //     };
+    // }, []);
 
     useEffect(() => {
-        // const soundObject = new Audio.Sound();
         
-        const loadSounds = async () => {
+        async function loadSoundContainer() {
             try {
-                const { sound } = await Audio.Sound.createAsync(require("../assets/audio/samples/kick1.wav"))
-                console.log('Sound Loaded Successfully')
-                console.log(sound)
-                soundRef.current = sound;
-                console.log("Playback status1:", await soundRef.current.getStatusAsync());
+                console.log(soundRef.current)
+                await loadSound();
             } catch (error) {
-                console.log("Error loading sound:", error);
+                console.log(error)
             }
-            
         }
-        loadSounds();
+        loadSoundContainer();
 
-        return () => {
-            soundObject && soundObject.unloadAsync();
-        };
-    }, []);
+        return soundRef.current
+            ? () => {
+            soundRef.current.unloadAsync();
+            }
+            :
+            undefined;
+        
+    }, [])
+
+    const loadSound = async () => {
+        console.log('Loading Sound');
+        const { sound } = await Audio.Sound.createAsync(require('../assets/audio/samples/kick1.wav'));
+        soundRef.current = sound;
+        console.log('Loaded sound')
+        console.log(soundRef.current);
+
+    }
 
     const testSound = async () => {
-
-        try {
-            
-            console.log('here1')
-            if (soundRef.current) {
-                const status = await soundRef.current.getStatusAsync();
-                console.log("Playback status:", status);
-                console.log('here2')
-                await soundRef.current.playAsync();
-                console.log('here3')
-            } else {
-                console.log("Sound reference is null: ", soundRef)
-            }
-        } catch (error) {
-            console.log(error)
+        console.log('Playing Sound');
+        console.log(soundRef.current)
+        if (soundRef.current) {
+            await soundRef.current.replayAsync();
         }
     }
+
+    // const testSound = async () => {
+        
+
+    //     try {
+            
+    //         console.log('here1')
+    //         if (soundRef.current) {
+    //             const status = await soundRef.current.getStatusAsync();
+    //             console.log("Playback status:", status);
+    //             console.log('here2')
+    //             await soundRef.current.playAsync();
+    //             console.log('here3')
+    //         } else {
+    //             console.log("Sound reference is null: ", soundRef)
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+
+    // const testSound = async () => {
+    //     const sound = new Audio.Sound();
+
+    //     try {
+    //         const result = await sound.loadAsync(require('../assets/audio/samples/kick1.wav'));
+    //         console.log(result);
+    //         console.log(sound)
+    //         await sound.playAsync();
+    //     } catch (error) {
+    //         console.error('AUDIO PLAY: ', error)
+    //     }
+    // }
 
 
     
