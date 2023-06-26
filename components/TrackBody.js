@@ -18,6 +18,8 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
 
     const soundRef = useRef(undefined);
 
+    
+
     // useEffect(() => {
     //     // const soundObject = new Audio.Sound();
         
@@ -42,6 +44,8 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
     //         console.log(soundRef.current)
     //     };
     // }, []);
+    
+    // current --------------------------
 
     useEffect(() => {
         
@@ -66,20 +70,40 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
 
     const loadSound = async () => {
         console.log('Loading Sound');
-        const { sound } = await Audio.Sound.createAsync(require('../assets/audio/samples/kick1.wav'));
+        await Audio.setAudioModeAsync({playsInSilentModeIOS: true})
+        const { sound: playbackObject } = await Audio.Sound.createAsync(require('../kick2.wav'));
+        console.log(playbackObject)
         soundRef.current = sound;
         console.log('Loaded sound')
         console.log(soundRef.current);
 
     }
 
+    // const testSound = async () => {
+    //     console.log('Playing Sound');
+    //     console.log(soundRef.current)
+    //     if (soundRef.current) {
+    //         await soundRef.current.replayAsync();
+    //     }
+    // }
+
+
     const testSound = async () => {
-        console.log('Playing Sound');
-        console.log(soundRef.current)
-        if (soundRef.current) {
-            await soundRef.current.replayAsync();
+        console.log('here')
+        const sound = new Audio.Sound();
+        console.log('here')
+        try {
+            await sound.loadAsync(require('../assets/audio/samples/kick1.wav'));
+            console.log('here')
+            await sound.playAsync();
+            console.log('here')
+            await sound.unloadAsync();
+            console.log('here')
+        } catch (error) {
+            console.log(error)
         }
     }
+
 
     // const testSound = async () => {
         
@@ -137,7 +161,7 @@ export default function TrackBody({trackIndex, contents, isPlaying, updateTrackC
 
   return (
     <View>
-        <Pressable style={{backgroundColor: 'red', height: 40, width: 40}} onPress={async () => await testSound()}></Pressable>
+        <Pressable style={{backgroundColor: 'red', height: 40, width: 40}} onPress={testSound}></Pressable>
       <FlatList
         data={contents}
         renderItem={(tileData) => {
